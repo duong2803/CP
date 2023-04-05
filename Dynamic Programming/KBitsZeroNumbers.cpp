@@ -1,3 +1,5 @@
+// Source https://oj.vnoi.info/problem/binary
+
 #include<bits/stdc++.h>
 using namespace std;
 
