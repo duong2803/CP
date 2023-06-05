@@ -2,9 +2,8 @@ template<typename T> T inv(T a, T m){ T u = 0, v = 1; while (a != 0) { T t = m /
 
 template<typename T>
 class Modular{
-private:
-	long long x;
 public:
+	long long x;
 	constexpr Modular() {}
 	template<typename U> Modular(U x){if(x < 0) x += mod(); this->x = x; }
 
