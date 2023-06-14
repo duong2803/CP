@@ -82,7 +82,7 @@ template<typename T, typename U>
 Modular<T> Pow(const Modular<T>& a, const U& b){ assert(b >= 0); Modular<T> x = a,res = 1; U p = b; while(p){ if(p & 1) res *= x; x *= x; p >>= 1; } return res; }
 
 template<typename T> 
-Modular<T> Pow(const Modular<T>& a, const Modular<T>& b){return Pow(a, (T) b);}
+Modular<T> Pow(const Modular<T>& a, const Modular<T>& b){return Pow(a, (typename decay<decltype(T::value)>::type) b);}
 
 template<typename T> std::ostream& operator<<(std::ostream& out, const Modular<T> &a){ out << a.x; return out; }
 template<typename T> std::istream& operator>>(std::istream& in, Modular<T> &a){ in >> a.x; a.x %= Modular<T>::mod(); return in; }
