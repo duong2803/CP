@@ -17,6 +17,8 @@ public:
 	template<typename U> Modular& operator-=(const U& a){ return *this -= Modular(a); }
 	Modular& operator*= (const Modular &a){ x = (x % mod()) * (a.x % mod()); x %= mod(); return *this; }
 	Modular& operator/= (const Modular &a){ return *this *= Modular(inv(a.x, mod())); }	
+	Modular& operator%=(const Modular &a){x %= a.x; return *this;}
+	template<typename U> Modular& operator%=(const U& a){return *this %= Modular(a);}
 
 	Modular& operator++(){ return *this += 1; }
 	Modular operator++(int) { Modular res(*this); *this += 1; return res; }
@@ -72,8 +74,15 @@ template<typename T> Modular<T> operator/(const Modular<T>& a, const Modular<T>&
 template<typename T, typename U> Modular<T> operator/(const Modular<T>& a, U b){ return Modular<T>(a) /= b; }
 template<typename T, typename U> Modular<U> operator/(T a, const Modular<U>& b){ return Modular<U>(a) /= b; }
 
+template<typename T> Modular<T> operator%(const Modular<T>& a, const Modular<T>& b){ return Modular<T>(a) %= b; }
+template<typename T, typename U> Modular<T> operator%(const Modular<T>& a, U b){ return Modular<T>(a) %= b; }
+template<typename T, typename U> Modular<U> operator%(T a, const Modular<U>& b){ return Modular<U>(a) %= b; }
+
 template<typename T, typename U> 
 Modular<T> Pow(const Modular<T>& a, const U& b){ assert(b >= 0); Modular<T> x = a,res = 1; U p = b; while(p){ if(p & 1) res *= x; x *= x; p >>= 1; } return res; }
+
+template<typename T> 
+Modular<T> Pow(const Modular<T>& a, const Modular<T>& b){return Pow(a, (T) b);}
 
 template<typename T> std::ostream& operator<<(std::ostream& out, const Modular<T> &a){ out << a.x; return out; }
 template<typename T> std::istream& operator>>(std::istream& in, Modular<T> &a){ in >> a.x; a.x %= Modular<T>::mod(); return in; }
