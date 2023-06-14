@@ -7,13 +7,27 @@ call plug#end()
 
 syntax on
 set clipboard=unnamed
-if has("gui_running")
-  if has("gui_gtk2")
-    set guifont=Inconsolata\ 12
-  elseif has("gui_macvim")
-    set guifont=Menlo\ Regular:h14
-  elseif has("gui_win32")
-    set guifont=Consolas:h11:cANSI
+
+if has("autocmd")
+  function! SetGuiFont()
+    if has("gui_gtk") && !(has("win32") || has("win64"))
+      let &guifont="Ubuntu Mono derivative Powerline 12"
+    elseif has("win32") || has("win64")
+      try
+        let &guifont="DejaVu_Sans_Mono_for_Powerline:h14:cANSI:qDRAFT"
+      catch
+        " font does not exists, fall back to default
+        let &guifont="Courier_New:h10:cANSI"
+      endtry
+    " optionally: add statements for other guis
+    endif
+  endfunction
+
+  if !exists('#VimStartup#GuiEnter')
+    augroup VimStartup
+      au!
+      autocmd GuiEnter * :call SetGuiFont()
+    augroup end
   endif
 endif
 
@@ -33,13 +47,23 @@ inoremap {<CR> {<CR>}<Esc>O
 inoremap {{ {
 inoremap {} {}
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
 autocmd filetype cpp nnoremap <F9> :w <bar> !g++ -std=c++14 % -o %:r -Wl,--stack,268435456<CR>
 autocmd filetype cpp nnoremap <F10> :!%:r<CR>
+autocmd filetype python nnoremap <F9> :w <bar> !py %<CR>
 autocmd filetype cpp nnoremap <C-C> :s/^\(\s*\)/\1\/\/<CR> :s/^\(\s*\)\/\/\/\//\1<CR> $
 autocmd filetype java nnoremap <F9> :w <bar> !javac %<CR>
 autocmd filetype java nnoremap <F10> :w <bar> !java %<CR>
 autocmd filetype java inoremap sout System.out.println("");<Left><Left><Left>
 autocmd filetype java inoremap psvm public static void main(String[] args){<CR><CR>}
+
+inoremap <space>t :-1read D:\ITSIEUCAPPRO\C++\Template\Mint.cpp <CR>/{<CR>o
+nnoremap <leader>Mint :<C-u>pHello<CR>
+
+"The following command puts the contents of Mint.cpp 
+"under the cursor when the user types ":Mint" in normal mode.
+command Mint :-1r D:\ITSIEUCAPPRO\C++\Template\Mint.cpp
 
 set nu
 augroup numbertoggle
@@ -83,5 +107,11 @@ function MyDiff()
 endfunction
 
 set nobackup noswapfile noundofile autoread mouse=a
+:set pumheight=20
 autocmd VimResized * wincmd =
-autocmd BufNewFile main*.cpp 0r D:\ITSIEUCAPPRO\C++\Template\template.cpp
+
+autocmd BufNewFile *.cpp $pu=strftime('// created: %Y-%m-%d %H:%M:%S')
+autocmd BufNewFile *.cpp $pu=('// author: Nguyen Tung Duong')
+autocmd BufNewFile *.cpp $pu=('')
+autocmd BufNewFile *.cpp 4r D:\ITSIEUCAPPRO\C++\Template\createNewFile.cpp
+
