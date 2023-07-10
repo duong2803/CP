@@ -58,12 +58,9 @@ autocmd filetype java nnoremap <F10> :w <bar> !java %<CR>
 autocmd filetype java inoremap sout System.out.println("");<Left><Left><Left>
 autocmd filetype java inoremap psvm public static void main(String[] args){<CR><CR>}
 
-inoremap <space>t :-1read D:\ITSIEUCAPPRO\C++\Template\Mint.cpp <CR>/{<CR>o
-nnoremap <leader>Mint :<C-u>pHello<CR>
-
 "The following command puts the contents of Mint.cpp 
 "under the cursor when the user types ":Mint" in normal mode.
-command Mint :-1r D:\ITSIEUCAPPRO\C++\Template\Mint.cpp
+command Mint :-1r D:\ITSIEUCAPPRO\C++\Template\Mint.cpp | ']+1
 
 set nu
 augroup numbertoggle
